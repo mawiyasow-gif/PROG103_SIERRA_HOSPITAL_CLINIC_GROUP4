@@ -44,28 +44,26 @@ General & Technical Features
 - Automatic priority queue sorting: Emergency > Pregnant > Normal, then by arrival time
 - Each staff role (Doctor / Receptionist) creates and manages its own password on first login
 
-# How to Run the Project
-    1.	Prerequisites
+ How to Run the Project
+	1.	Prerequisites
 Make sure you have Python 3 installed on your computer. No extra libraries are needed — this project uses only tkinter, which comes built-in with Python.
-    2.	Download the code
+	2.	Download the code
     https://github.com/mawiyasow-gif/PROG103_SIERRA_HOSPITAL_CLINIC_GROUP4.git
     cd sierra_health_hospital_clinic
 
-    3.	Run the application
+3.	Run the application
     python sierra_health_clinic.py
 
-Authors
-    •	Alhaji Mawiya Sow - 905005175
+ Authors
+	•	Alhaji Mawiya Sow - 905005175
     •	Mohamed Alimu Jalloh - 905005461
     •	Ibrahim JP Kai-Samba - 905005408
 
-Real‑World Impact
-    •	Built for Sierra Leone’s healthcare system
-    •	Helps clinics manage patient queues fairly, reducing wait‑time confusion and prioritising emergency and pregnant patients
-Technology Stack
-    •	Language: Python 3
-    •	GUI: tkinter (built‑in, no third‑party packages required)
-    •	Data storage: Python dictionaries & lists (temporary, in‑memory)
-
-
-   •	License: MIT
+ Real‑World Impact
+	•	Built for Sierra Leone’s healthcare system
+	•	Helps clinics manage patient queues fairly, reducing wait‑time confusion and prioritising emergency and pregnant patients
+ Technology Stack
+	•	Language: Python 3
+	•	GUI: tkinter (built‑in, no third‑party packages required)
+	•	Data storage: Python dictionaries & lists (temporary, in‑memory)
+	•	License: MIT
