@@ -21,7 +21,7 @@ For Receptionists
 - View a summary of today’s totals: registered, waiting, served, and breakdown by category
 - Logout safely to return to the login screen
 
-##For Doctors
+For Doctors
 
 - Secure login using a self‑created password
 - Attend to patients
@@ -32,7 +32,7 @@ For Receptionists
 – Select a served patient and write/save prescription notes
 - Logout safely to return to the login screen
 
-##General & Technical Features
+General & Technical Features
 
 - Clean, simple GUI using tkinter
 – No terminal interaction needed
