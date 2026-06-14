@@ -52,7 +52,8 @@ General & Technical Features
 - Receptionists Dashboard
 <img width="1624" height="980" alt="image" src="https://github.com/user-attachments/assets/168f73f4-84e8-4ef4-9028-1240730bc788" />
 
-
+- Doctor Dashboard
+<img width="1618" height="932" alt="image" src="https://github.com/user-attachments/assets/98aeb6d0-e2c7-4c63-91c4-bad8dcf2fb87" />
 
 
  ## How to Run the Project
