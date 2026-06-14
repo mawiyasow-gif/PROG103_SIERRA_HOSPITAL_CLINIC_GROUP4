@@ -47,7 +47,12 @@ General & Technical Features
 
 ## Screenshot
 - Login Page
-<img width="1020" height="994" alt="image" src="https://github.com/user-attachments/assets/b0731c2a-da99-4c18-a6de-d4ab1a5e6856" />
+<img width="1000" height="950" alt="image" src="https://github.com/user-attachments/assets/b0731c2a-da99-4c18-a6de-d4ab1a5e6856" />
+
+- Receptionists Dashboard
+<img width="1624" height="980" alt="image" src="https://github.com/user-attachments/assets/168f73f4-84e8-4ef4-9028-1240730bc788" />
+
+
 
 
  ## How to Run the Project
