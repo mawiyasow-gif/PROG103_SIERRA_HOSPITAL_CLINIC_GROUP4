@@ -44,6 +44,12 @@ General & Technical Features
 - Automatic priority queue sorting: Emergency > Pregnant > Normal, then by arrival time
 - Each staff role (Doctor / Receptionist) creates and manages its own password on first login
 
+
+## Screenshot
+- Login Page
+<img width="1020" height="994" alt="image" src="https://github.com/user-attachments/assets/b0731c2a-da99-4c18-a6de-d4ab1a5e6856" />
+
+
  ## How to Run the Project
 	1.	Prerequisites
 Make sure you have Python 3 installed on your computer. No extra libraries are needed — this project uses only tkinter, which comes built-in with Python.
@@ -68,3 +74,5 @@ Make sure you have Python 3 installed on your computer. No extra libraries are n
 	•	GUI: tkinter (built‑in, no third‑party packages required)
 	•	Data storage: Python dictionaries & lists (temporary, in‑memory)
 	•	License: MIT
+
+
