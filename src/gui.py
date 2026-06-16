@@ -124,6 +124,152 @@ def open_patient_info(parent):
     build_search_view(win, "Info", "Search (Name / ID / Phone):", "Type a name, patient ID, or phone number to search", "result")
     flat_btn(win, "Close", GREY_BTN, win.destroy, 10).pack(pady=8)
 
-"""ALIMU CODE"""
+# DOCTOR  PRESCRIBE MEDICATION
+def open_prescriptions(parent):
+    win = std_window(parent, "Prescribe Medication", "760x560", "Prescribe Medication", "Prescribe Medication", div_pad=6, grab=True)
+
+    tk.Label(win, text="Select a served patient from the list below:", font=FONT_BODY, bg=BG, fg=GREY_BTN).pack(anchor="w", padx=16)
+
+    list_frame = tk.Frame(win, bg=BG, padx=16); list_frame.pack(fill="x")
+    lb = tk.Listbox(list_frame, height=6, font=FONT_BODY, selectmode="single", bg=CARD, relief="solid", bd=1,
+        activestyle="dotbox", selectbackground=BLUE_MID, selectforeground="white")
+    lb.pack(fill="x", pady=6)
+
+    detail = tk.Frame(win, bg=BG, padx=16); detail.pack(fill="x")
+    tk.Label(detail, text="Prescription Notes:", font=FONT_BOLD, bg=BG).pack(anchor="w", pady=(6,2))
+    rx_box = tk.Text(detail, height=7, font=FONT_BODY, relief="solid", bd=1, wrap="word", bg=CARD, fg="#1a1a1a")
+    rx_box.pack(fill="x")
+
+    err_lbl = tk.Label(win, text="", font=FONT_SMALL, bg=BG, fg=RED_DARK); err_lbl.pack()
+
+    def populate():
+        lb.delete(0, "end")
+        if not served:
+            lb.insert("end", "  (No patients have been served yet)")
+        else:
+            for p in served:
+                rx_flag = "  [Prescribed]" if p.get("prescription") else "  [Pending]"
+                lb.insert("end", f"  {p['id']}   {p['name']}   ({p['category']}){rx_flag}")
+
+    def on_select(event=None):
+        sel = lb.curselection()
+        if not sel or not served: return
+        p = served[sel[0]]; rx_box.delete("1.0", "end"); rx_box.insert("end", p.get("prescription","")); err_lbl.config(text="")
+
+    def save():
+        sel = lb.curselection()
+        if not sel or not served:
+            err_lbl.config(text="Please select a patient first."); return
+        rx = rx_box.get("1.0", "end").strip()
+        if not rx:
+            err_lbl.config(text="Prescription notes cannot be empty."); return
+        served[sel[0]]["prescription"] = rx
+        messagebox.showinfo("Saved", f"Prescription saved for {served[sel[0]]['name']}.")
+        err_lbl.config(text=""); populate()
+
+    lb.bind("<<ListboxSelect>>", on_select); populate()
+
+    btn_row = tk.Frame(win, bg=BG); btn_row.pack(pady=10)
+    flat_btn(btn_row, "Save Prescription", TEAL, save, 22).pack(side="left", padx=6)
+    flat_btn(btn_row, "Refresh List", BLUE_MID, populate, 14).pack(side="left", padx=6)
+    flat_btn(btn_row, "Close", GREY_BTN, win.destroy, 10).pack(side="left", padx=6)
+
+
+# RECEPTIONIST  REGISTER PATIENT
+def open_register(parent, on_done):
+    win = std_window(parent, "Register Patient", "500x580", "Register Patient", "New Patient Registration", div_pad=8, grab=True)
+
+    frm = tk.Frame(win, bg=BG, padx=24); frm.pack(fill="both", expand=True)
+
+    nv = tk.StringVar(); av = tk.StringVar(); gv = tk.StringVar(value="Male"); pv = tk.StringVar()
+    cv = tk.StringVar(); tv = tk.StringVar(value=datetime.now().strftime("%H:%M")); kv = tk.StringVar(value="Normal")
+
+    row = 0
+    def label(text):
+        nonlocal row
+        tk.Label(frm, text=text, font=FONT_BOLD, bg=BG, anchor="w").grid(row=row, column=0, sticky="w", pady=7)
+
+    def entry(var):
+        nonlocal row
+        e = tk.Entry(frm, textvariable=var, width=30, font=FONT_BODY, relief="solid", bd=1)
+        e.grid(row=row, column=1, pady=7, padx=(10,0)); row += 1; return e
+
+    label("Full Name:"); entry(nv)
+    label("Age:"); entry(av)
+
+    label("Gender:")
+    gf = tk.Frame(frm, bg=BG); gf.grid(row=row, column=1, pady=7, padx=(10,0), sticky="w")
+    for g in ["Male","Female","Other"]:
+        tk.Radiobutton(gf, text=g, variable=gv, value=g, bg=BG, font=FONT_BODY, activebackground=BG).pack(side="left", padx=5)
+    row += 1
+
+    label("Phone Number:"); entry(pv)
+    label("Complaint:"); entry(cv)
+    label("Arrived (HH:MM):"); entry(tv)
+
+    label("Category:")
+    ttk.Combobox(frm, textvariable=kv, width=28, state="readonly", font=FONT_BODY,
+                 values=["Emergency","Pregnant","Normal"]).grid(row=row, column=1, pady=7, padx=(10,0))
+    row += 1
+
+    err = tk.Label(frm, text="", font=FONT_SMALL, bg=BG, fg=RED_DARK)
+    err.grid(row=row, column=0, columnspan=2, pady=4); row += 1
+
+    def submit():
+        n=nv.get().strip(); a=av.get().strip(); g=gv.get(); p=pv.get().strip(); c=cv.get().strip(); t=tv.get().strip(); k=kv.get()
+        checks = [(ok_name(n),"Name must contain letters only (no numbers)."),
+                  (ok_age(a),"Age must be a number between 0 and 120."),
+                  (ok_phone(p),"Phone must be 7 to 15 digits."),
+                  (ok_note(c),"Please enter a valid complaint (not just numbers)."),
+                  (ok_time(t),"Arrival time must be in HH:MM format (e.g. 09:30).")]
+        for ok, msg in checks:
+            if not ok:
+                err.config(text=f"  {msg}"); return
+        pid = register_patient(n, int(a), g, p, c, t, k)
+        pos = next((i+1 for i, pt in enumerate(patients) if pt["id"]==pid), "?")
+        messagebox.showinfo("Patient Registered",
+            f"Registration successful!\n\nName       : {n.title()}\nPatient ID : {pid}\nGender     : {g}\n"
+            f"Phone      : {p}\nCategory   : {k}\nQueue Pos  : {pos} of {len(patients)}")
+        on_done(); win.destroy()
+
+    flat_btn(frm, "Register Patient", TEAL, submit, 24).grid(row=row, column=0, columnspan=2, pady=10)
+
+# RECEPTIONIST  VIEW QUEUE
+def open_queue(parent):
+    win = std_window(parent, "Live Queue", "1150x660", "Live Queue", "Waiting Queue")
+    tree = build_queue_table(win, "Queue")
+
+    def refresh(): refresh_queue(tree)
+
+    btn_row = tk.Frame(win, bg=BG); btn_row.pack(pady=10)
+    flat_btn(btn_row, "Refresh", BLUE_MID, refresh, 14).pack(side="left", padx=6)
+    flat_btn(btn_row, "Close", GREY_BTN, win.destroy, 10).pack(side="left", padx=6)
+    refresh()
+
+# RECEPTIONIST  SEARCH PATIENTS
+def open_search(parent):
+    win = std_window(parent, "Search Patient", "1150x640", "Search Patients", "Search Patients", div_pad=8)
+    build_search_view(win, "Search", "Name / ID / Phone:", "Start typing to search all patients", "record")
+    flat_btn(win, "Close", GREY_BTN, win.destroy, 10).pack(pady=8)
+
+# RECEPTIONIST  SERVED PATIENTS
+def open_served(parent):
+    win = std_window(parent, "Served Patients", "1150x640", "Served Patients",
+                      f"Served Today  {len(served)} patient(s)", head_color=TEAL, div_pad=8)
+    cols = ("ID","Name","Age","Gender","Phone","Category","Arrived","Complaint")
+    widths = [75,145,50,70,105,105,78,160]
+    fr, tree = build_treeview(win, cols, widths, height=14, tag="Served"); fr.pack(fill="both", expand=True, padx=10)
+    tree.column("Name", anchor="w", stretch=True); tree.column("Complaint", anchor="w", stretch=True)
+    tree.tag_configure("odd", background=ROW_ODD, foreground="#1a1a1a")
+    tree.tag_configure("even", background=ROW_EVEN, foreground="#1a1a1a")
+
+    if not served:
+        tree.insert("", "end", values=("","  No patients served yet","","","","","",""))
+    else:
+        for i, p in enumerate(served):
+            tree.insert("", "end", values=(p["id"],p["name"],p["age"],p["gender"],p["phone"],p["category"],p["arrived"],p["complaint"]),
+                         tags=("odd" if i % 2 == 0 else "even",))
+
+    flat_btn(win, "Close", GREY_BTN, win.destroy, 10).pack(pady=10)
 
 """KAI CODE"""
