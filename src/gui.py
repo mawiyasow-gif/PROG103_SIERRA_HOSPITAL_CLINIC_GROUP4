@@ -272,4 +272,85 @@ def open_served(parent):
 
     flat_btn(win, "Close", GREY_BTN, win.destroy, 10).pack(pady=10)
 
-"""KAI CODE"""
+# RECEPTIONIST  SUMMARY
+def open_summary(parent):
+    win = std_window(parent, "Summary", "560x520", "Summary", "Today's Summary", div_pad=10)
+    counts = queue_counts()
+    fr, tree = build_treeview(win, ("Description","Count"), [330,120], height=10, tag="Summary"); fr.pack(fill="both", expand=True, padx=16)
+    tree.column("Description", anchor="w"); tree.column("Count", anchor="center")
+
+    tree.tag_configure("total", background="#e8eef8", foreground="#0d1b4b")
+    tree.tag_configure("waiting", background="#fff5d6", foreground="#7d4e00")
+    tree.tag_configure("served", background="#d6f5e3", foreground="#0a4020")
+    tree.tag_configure("emerg", background=TAG_EMERG, foreground="#6b1212")
+    tree.tag_configure("preg", background=TAG_PREG, foreground="#0d3060")
+    tree.tag_configure("normal", background="#f0f0f2", foreground="#333")
+    tree.tag_configure("next", background=TAG_NEXT, foreground="#0a4020")
+
+    total = len(patients) + len(served)
+    tree.insert("", "end", values=("Total Registered Today", total), tags=("total",))
+    tree.insert("", "end", values=("Currently Waiting", len(patients)), tags=("waiting",))
+    tree.insert("", "end", values=("Already Served", len(served)), tags=("served",))
+    tree.insert("", "end", values=("", ""))
+    tree.insert("", "end", values=("Emergency in Queue", counts["Emergency"]), tags=("emerg",))
+    tree.insert("", "end", values=("Pregnant in Queue", counts["Pregnant"]), tags=("preg",))
+    tree.insert("", "end", values=("Normal in Queue", counts["Normal"]), tags=("normal",))
+    if patients:
+        n = patients[0]
+        tree.insert("", "end", values=("", ""))
+        tree.insert("", "end", values=(f"Next Patient:   {n['name']}   |   {n['category']}", ""), tags=("next",))
+
+    flat_btn(win, "Close", GREY_BTN, win.destroy, 10).pack(pady=12)
+
+# ROLE DASHBOARDS
+def _base_dashboard(root, title, subtitle):
+    win = tk.Toplevel(root); win.title(f"{title}  {CLINIC_NAME}"); win.configure(bg=BG)
+    try: win.state("zoomed")
+    except: win.attributes("-zoomed", True)
+    win.minsize(820, 560); header_bar(win, subtitle); return win
+
+def open_doctor_dashboard(root):
+    win = _base_dashboard(root, "Doctor", "Doctor Portal"); divider(win)
+    tk.Label(win, text="Doctor Dashboard", font=FONT_TITLE, bg=BG, fg=BLUE_DARK).pack(pady=(28,4))
+    tk.Label(win, text=TAGLINE, font=("Helvetica",10,"italic"), bg=BG, fg=GREY_BTN, justify="center").pack(pady=(0,20))
+
+    btns = [("Attend to Patients", TEAL, lambda: open_attend(win)),
+            ("View Patient Info", BLUE_DARK, lambda: open_patient_info(win)),
+            ("Prescribe Medication", BLUE_MID, lambda: open_prescriptions(win))]
+    for label, color, cmd in btns:
+        flat_btn(win, label, color, cmd, 32, pady=8).pack(pady=6)
+
+    divider(win, pady=14)
+    flat_btn(win, "Logout", RED_DARK, lambda: do_logout(win, root), 14).pack(pady=4)
+
+def open_receptionist_dashboard(root):
+    win = _base_dashboard(root, "Receptionist", "Receptionist Portal")
+
+    stats = tk.Frame(win, bg=BG); stats.pack(fill="x", padx=16, pady=(6,0))
+    w_lbl = tk.Label(stats, text="Waiting: 0", font=FONT_BOLD, bg=BG, fg=AMBER); w_lbl.pack(side="left", padx=(0,20))
+    s_lbl = tk.Label(stats, text="Served: 0", font=FONT_BOLD, bg=BG, fg=TEAL); s_lbl.pack(side="left")
+
+    def update_stats():
+        w_lbl.config(text=f"Waiting: {len(patients)}"); s_lbl.config(text=f"Served:  {len(served)}")
+
+    divider(win, pady=6)
+    tk.Label(win, text="Receptionist Dashboard", font=FONT_TITLE, bg=BG, fg=BLUE_DARK).pack(pady=(10,4))
+    tk.Label(win, text=TAGLINE, font=("Helvetica",10,"italic"), bg=BG, fg=GREY_BTN, justify="center").pack(pady=(0,16))
+
+    def do_register(): open_register(win, update_stats)
+
+    btns = [("Register Patient", TEAL, do_register),
+            ("View Queue", BLUE_DARK, lambda: open_queue(win)),
+            ("Search Patient", BLUE_MID, lambda: open_search(win)),
+            ("Served Patients", "#1e8449", lambda: open_served(win)),
+            ("Summary", GREY_BTN, lambda: open_summary(win))]
+    for label, color, cmd in btns:
+        flat_btn(win, label, color, cmd, 32, pady=8).pack(pady=6)
+
+    divider(win, pady=14)
+    flat_btn(win, "Logout", RED_DARK, lambda: do_logout(win, root), 14).pack(pady=4)
+
+def do_logout(win, root):
+    if messagebox.askyesno("Logout", "Are you sure you want to logout?"):
+        win.destroy()
+        login_window(root, lambda role: (open_doctor_dashboard(root) if role == "Doctor" else open_receptionist_dashboard(root)))
