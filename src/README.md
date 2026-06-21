@@ -61,13 +61,13 @@ General & Technical Features
 Make sure you have Python 3 installed on your computer. No extra libraries are needed — this project uses only tkinter, which comes built-in with Python.
 
 	2.	Copy The link From the Repo
-    https://github.com/mawiyasow-gif/PROG103_SIERRA_HOSPITAL_CLINIC_GROUP4.git
+https://github.com/mawiyasow-gif/PROG103_SIERRA_HOSPITAL_CLINIC_GROUP4.git
     
 	3.	Run it on Your Terminal Using:
- git Clone https://github.com/mawiyasow-gif/PROG103_SIERRA_HOSPITAL_CLINIC_GROUP4.git
+git Clone https://github.com/mawiyasow-gif/PROG103_SIERRA_HOSPITAL_CLINIC_GROUP4.git
 
     4.	Run the application
- python sierra_health_clinic.py
+python sierra_health_clinic.py
 
  ## Authors
 	•	Alhaji Mawiya Sow - 905005175
