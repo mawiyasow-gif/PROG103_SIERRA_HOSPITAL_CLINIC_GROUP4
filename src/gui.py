@@ -29,7 +29,7 @@ def login_window(root, on_success):
     frm = tk.Frame(win, bg=BG, padx=44); frm.pack(fill="both", expand=True)
 
     def lbl(row, text):
-        tk.Label(frm, text=text, font=FONT_BOLD, bg=BG, anchor="w").grid(row=row, column=0, sticky="w", pady=9)
+        tk.Label(frm, text=text, font=FONT_BOLD, bg=BG,).grid(row=row, column=0, sticky="e", pady=9)
 
     def ent(row, var, show=""):
         e = tk.Entry(frm, textvariable=var, width=30, font=FONT_BODY, show=show, relief="solid", bd=1)
@@ -44,7 +44,7 @@ def login_window(root, on_success):
     lbl(1, "Password:")
     pw_ent = ent(1, pw_var, show="*")
 
-    cf_lbl_widget = tk.Label(frm, text="Confirm:", font=FONT_BOLD, bg=BG, anchor="w")
+    cf_lbl_widget = tk.Label(frm, text="Confirm:", font=FONT_BOLD, bg=BG,)
     cf_ent_widget = tk.Entry(frm, textvariable=cf_var, width=30, font=FONT_BODY, show="*", relief="solid", bd=1)
 
     hint = tk.Label(frm, text="", font=FONT_SMALL, bg=BG, fg=BLUE_MID, wraplength=340)
@@ -56,7 +56,7 @@ def login_window(root, on_success):
         role = role_var.get(); err.config(text=""); pw_var.set(""); cf_var.set("")
         if passwords[role] is None:
             hint.config(text=f"No password set for {role}. Create one now (min 4 chars).")
-            cf_lbl_widget.grid(row=2, column=0, sticky="w", pady=9); cf_ent_widget.grid(row=2, column=1, pady=9, padx=(12,0))
+            cf_lbl_widget.grid(row=2, column=0, sticky="e", pady=9); cf_ent_widget.grid(row=2, column=1, pady=9, padx=(12,0))
         else:
             hint.config(text=f"Enter your {role} password to continue.")
             cf_lbl_widget.grid_remove(); cf_ent_widget.grid_remove()
