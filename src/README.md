@@ -59,6 +59,7 @@ General & Technical Features
  ## How to Run the Project
 	1.	Prerequisites
 Make sure you have Python 3 installed on your computer. No extra libraries are needed — this project uses only tkinter, which comes built-in with Python.
+
 	2.	Copy The link From the Repo
     https://github.com/mawiyasow-gif/PROG103_SIERRA_HOSPITAL_CLINIC_GROUP4.git
     
