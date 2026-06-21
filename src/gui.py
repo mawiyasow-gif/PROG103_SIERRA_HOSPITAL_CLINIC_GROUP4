@@ -187,7 +187,7 @@ def open_register(parent, on_done):
     row = 0
     def label(text):
         nonlocal row
-        tk.Label(frm, text=text, font=FONT_BOLD, bg=BG, anchor="w").grid(row=row, column=0, sticky="w", pady=7)
+        tk.Label(frm, text=text, font=FONT_BOLD, bg=BG,).grid(row=row, column=0, sticky="e", pady=7)
 
     def entry(var):
         nonlocal row
