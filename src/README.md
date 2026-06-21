@@ -59,11 +59,13 @@ General & Technical Features
  ## How to Run the Project
 	1.	Prerequisites
 Make sure you have Python 3 installed on your computer. No extra libraries are needed — this project uses only tkinter, which comes built-in with Python.
-	2.	Download the code
+	2.	Copy The link From the Repo
     https://github.com/mawiyasow-gif/PROG103_SIERRA_HOSPITAL_CLINIC_GROUP4.git
-    cd sierra_health_hospital_clinic
+    
+	3.	Run it on Your Terminal Using:
+ git Clone https://github.com/mawiyasow-gif/PROG103_SIERRA_HOSPITAL_CLINIC_GROUP4.git
 
-    3.	Run the application
+    4.	Run the application
  python sierra_health_clinic.py
 
  ## Authors
